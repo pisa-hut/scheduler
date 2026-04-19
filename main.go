@@ -37,10 +37,6 @@ type Config struct {
 	SlurmCPUs      string
 	SlurmMem       string
 	Backend        string
-	FilterAV       string
-	FilterSim      string
-	FilterMap      string
-	FilterSampler  string
 	MaxJobs        int
 }
 
@@ -58,10 +54,6 @@ func loadConfig() Config {
 		SlurmCPUs:      getenv("SLURM_CPUS", "12"),
 		SlurmMem:       getenv("SLURM_MEM", "12G"),
 		Backend:        getenv("EXECUTOR_BACKEND", "apptainer"),
-		FilterAV:       getenv("FILTER_AV", ""),
-		FilterSim:      getenv("FILTER_SIMULATOR", ""),
-		FilterMap:      getenv("FILTER_MAP", ""),
-		FilterSampler:  getenv("FILTER_SAMPLER", ""),
 		MaxJobs:        maxJobs,
 	}
 }
@@ -142,21 +134,7 @@ func countSlurmJobs() int {
 }
 
 func buildSbatchScript(cfg Config, taskID int) string {
-	var executorArgs []string
-	executorArgs = append(executorArgs, "--backend", cfg.Backend)
-	if cfg.FilterAV != "" {
-		executorArgs = append(executorArgs, "--av", cfg.FilterAV)
-	}
-	if cfg.FilterSim != "" {
-		executorArgs = append(executorArgs, "--simulator", cfg.FilterSim)
-	}
-	if cfg.FilterMap != "" {
-		executorArgs = append(executorArgs, "--map", cfg.FilterMap)
-	}
-	if cfg.FilterSampler != "" {
-		executorArgs = append(executorArgs, "--sampler", cfg.FilterSampler)
-	}
-	argsStr := strings.Join(executorArgs, " ")
+	argsStr := fmt.Sprintf("--backend %s --task-id %d", cfg.Backend, taskID)
 
 	partitionLine := ""
 	if cfg.SlurmPartition != "" {
