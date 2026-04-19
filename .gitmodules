@@ -1,0 +1,3 @@
+[submodule "executor"]
+	path = executor
+	url = git@github.com:PISA-Hut/executor.git

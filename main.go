@@ -51,7 +51,7 @@ func loadConfig() Config {
 
 	return Config{
 		ManagerURL:     mustEnv("MANAGER_URL"),
-		ExecutorDir:    mustEnv("EXECUTOR_DIR"),
+		ExecutorDir:    getenv("EXECUTOR_DIR", "./executor"),
 		PollInterval:   time.Duration(pollSec) * time.Second,
 		SlurmPartition: getenv("SLURM_PARTITION", ""),
 		SlurmTime:      getenv("SLURM_TIME", "01:00:00"),

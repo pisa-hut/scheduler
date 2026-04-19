@@ -4,15 +4,20 @@ Polls the manager for pending tasks and submits SLURM jobs to execute them.
 
 Runs on the SLURM login node as a long-running process.
 
-## Build
+## Setup
 
 ```bash
+git clone --recurse-submodules git@github.com:pisa-hut/schedular.git
+cd schedular
 go build -o scheduler .
-```
 
-## Usage
+# Set up executor dependencies
+cd executor
+cp .env.example .env
+uv sync
+cd ..
 
-```bash
+# Configure scheduler
 cp .env.example .env
 # Edit .env with your values
 ./scheduler
