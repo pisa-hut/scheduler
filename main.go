@@ -105,9 +105,9 @@ func loadDotenv() {
 }
 
 // fetchDemand returns the number of tasks that still need an executor
-// (pending + running). `running` counts because its executor may die
+// (queued + running). `running` counts because its executor may die
 // without notice; we leave capacity carrying it until the manager's
-// reaper marks the task back to `pending`.
+// reaper marks the task back to `queued`.
 func fetchDemand(cfg Config) (int, error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(cfg.ManagerURL + "/task")
@@ -127,7 +127,7 @@ func fetchDemand(cfg Config) (int, error) {
 
 	count := 0
 	for _, t := range tasks {
-		if t.TaskStatus == "pending" || t.TaskStatus == "running" {
+		if t.TaskStatus == "queued" || t.TaskStatus == "running" {
 			count++
 		}
 	}
